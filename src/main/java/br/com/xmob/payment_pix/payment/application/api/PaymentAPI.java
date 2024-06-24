@@ -23,6 +23,6 @@ public class PaymentAPI {
         log.debug("[PaymentRequest] {}", paymentRequest);
         PaymentResponse paymentResponse = paymentService.createCharge(paymentRequest);
         log.info("[finish] PaymentAPI - createCharge");
-        return null;
+        return paymentResponse;
     }
 }
