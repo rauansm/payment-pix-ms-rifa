@@ -12,3 +12,10 @@ logging:
     org.springframework.web: ${LOG_LEVEL:INFO}
     org.springframework.data.mongodb.core: ${LOG_LEVEL:DEBUG}
     br.com.xmob: ${LOG_LEVEL:DEBUG}
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
