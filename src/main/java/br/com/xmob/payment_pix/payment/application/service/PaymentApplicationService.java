@@ -1,5 +1,6 @@
 package br.com.xmob.payment_pix.payment.application.service;
 
+import br.com.xmob.payment_pix.payment.application.api.PaymentEvent;
 import br.com.xmob.payment_pix.payment.application.api.PaymentRequest;
 import br.com.xmob.payment_pix.payment.application.api.PaymentResponse;
 import br.com.xmob.payment_pix.payment.domain.Payment;
@@ -25,5 +26,13 @@ public class PaymentApplicationService implements PaymentService {
         Payment payment = paymentRepository.save(new Payment(pixResponse,paymentRequest));
         log.info("[finish] PaymentApplicationService - createCharge");
         return new PaymentResponse(payment);
+    }
+
+    @Override
+    public void paymentUpdate(PaymentEvent paymentEvent) {
+        log.info("[start] PaymentApplicationService - paymentUpdate");
+        log.debug("[PaymentEvent] {}", paymentEvent);
+
+        log.info("[finish] PaymentApplicationService - paymentUpdate");
     }
 }

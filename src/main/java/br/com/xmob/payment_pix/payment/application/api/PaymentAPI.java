@@ -1,9 +1,11 @@
 package br.com.xmob.payment_pix.payment.application.api;
 
 import br.com.xmob.payment_pix.payment.application.service.PaymentService;
+import io.awspring.cloud.messaging.listener.annotation.SqsListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,5 +26,13 @@ public class PaymentAPI {
         PaymentResponse paymentResponse = paymentService.createCharge(paymentRequest);
         log.info("[finish] PaymentAPI - createCharge");
         return paymentResponse;
+    }
+
+    @SqsListener(value = "fila-webhook")
+    public void paymentEventIdentifier(@Payload PaymentEvent paymentEvent){
+        log.info("[start] PaymentAPI - paymentEventIdentifier");
+        log.debug("[PaymentEvent] {}", paymentEvent);
+        paymentService.paymentUpdate(paymentEvent);
+        log.info("[finish] PaymentAPI - paymentEventIdentifier");
     }
 }
