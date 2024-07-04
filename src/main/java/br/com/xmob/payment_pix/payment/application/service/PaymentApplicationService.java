@@ -5,6 +5,7 @@ import br.com.xmob.payment_pix.payment.application.api.PaymentRequest;
 import br.com.xmob.payment_pix.payment.application.api.PaymentResponse;
 import br.com.xmob.payment_pix.payment.domain.Payment;
 import br.com.xmob.payment_pix.payment.domain.PixResponse;
+import br.com.xmob.payment_pix.payment.domain.PixStatusResponse;
 import br.com.xmob.payment_pix.payment.infra.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -32,7 +33,8 @@ public class PaymentApplicationService implements PaymentService {
     public void paymentUpdate(PaymentEvent paymentEvent) {
         log.info("[start] PaymentApplicationService - paymentUpdate");
         log.debug("[PaymentEvent] {}", paymentEvent);
-
+        PixStatusResponse statusPayment = pixClientRest.searchPixPaymentStatus(paymentEvent);
+        log.debug("[PixStatusResponse] {}", statusPayment);
         log.info("[finish] PaymentApplicationService - paymentUpdate");
     }
 }
