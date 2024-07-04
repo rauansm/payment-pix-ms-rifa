@@ -18,3 +18,12 @@ mercado-pago:
   pix:
     server: ${URL:https://api.mercadopago.com}
     accessToken: ${ACCESS_TOKEN:Bearer APP_USR-4013374519233343-062409-dc7e9d40ecf05a013ad8c3be4f018821-241014275}
+
+server:
+  port: 8083
+
+aws:
+  config:
+    region: ${AWS_SQS_REGION:us-east-1}
+    accessKey: ${AWS_SQS_ACCESS_KEY:AKIA6ODU3YWADLRQD4KC}
+    secretKey: ${AWS_SQS_SECRET_KEY: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}

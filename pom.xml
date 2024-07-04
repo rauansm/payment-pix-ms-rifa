@@ -14,8 +14,16 @@
 	<name>payment-pix</name>
 	<description>This microservice maintains the payment-pix business domain</description>
 	<properties>
+		<!-- JAVA VERSION-->
 		<java.version>17</java.version>
-		<spring-cloud.version>2021.0.7</spring-cloud.version>
+		<!-- SPRING CLOUD -->
+		<spring-cloud.version>2021.0.4</spring-cloud.version>
+		<!-- SPRING CLOUD STARTER-->
+		<spring-cloud.starter>3.0.1</spring-cloud.starter>
+		<!-- SPRING CLOUD AWS-->
+		<spring-cloud.aws>2.3.3</spring-cloud.aws>
+		<!-- HTTP CLIENT-->
+		<http-client.version>4.5.13</http-client.version>
 	</properties>
 	<dependencies>
 
@@ -61,13 +69,34 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.5.13</version>
+			<version>${http-client.version}</version>
+		</dependency>
+
+		<!--AWS -->
+		<dependency>
+			<groupId>io.awspring.cloud</groupId>
+			<artifactId>spring-cloud-aws-messaging</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.awspring.cloud</groupId>
+			<artifactId>spring-cloud-aws-starter</artifactId>
+			<version>${spring-cloud.starter}</version>
 		</dependency>
 
 	</dependencies>
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- AWS -->
+			<dependency>
+				<groupId>io.awspring.cloud</groupId>
+				<artifactId>spring-cloud-aws-dependencies</artifactId>
+				<version>${spring-cloud.aws}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- FEIGN INTEGRACAO -->
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
