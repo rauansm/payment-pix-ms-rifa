@@ -15,5 +15,5 @@ public interface MercadoPagoFeignClient {
     PixResponse createCharge(@RequestBody PixRequest pixRequest);
 
     @GetMapping("/v1/payments/{id}")
-    PixStatusResponse searchPixPaymentStatus(@PathVariable String id);
+    PixStatusResponse searchPixPaymentStatus(@PathVariable Long id);
 }

@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: ${PROFILE_ACTIVE:dev}
 
 server:
   servlet:
@@ -19,3 +19,12 @@ feign:
       default:
         connectTimeout: 5000
         readTimeout: 5000
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      searchPixStatus:
+        minimumNumberOfCalls: 4
+        slidingWindowSize: 8
+        waitDurationInOpenState: 50s
+

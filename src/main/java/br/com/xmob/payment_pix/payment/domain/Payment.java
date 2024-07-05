@@ -28,6 +28,7 @@ public class Payment {
     private String paymentMethodId;
     private String status;
     private String statusDetail;
+    private boolean integrated;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime expirationAt;
@@ -44,6 +45,7 @@ public class Payment {
         this.paymentMethodId = pixResponse.getPayment_method_id();
         this.status = pixResponse.getStatus();
         this.statusDetail = pixResponse.getStatus_detail();
+        this.integrated = true;
         this.createdAt = adjustDate(pixResponse.getDate_created());
         this.updatedAt = adjustDate(pixResponse.getDate_last_updated());
         this.expirationAt = adjustDate(pixResponse.getDate_of_expiration());
@@ -64,4 +66,14 @@ public class Payment {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
+    public void markAsNotIntegrated() {
+        this.integrated = false;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateStatus(PixStatusResponse statusPayment) {
+        this.status = statusPayment.getStatus();
+        this.statusDetail = statusPayment.getStatus_detail();
+        this.updatedAt = LocalDateTime.now();
+    }
 }

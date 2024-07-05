@@ -33,8 +33,10 @@ public class PaymentApplicationService implements PaymentService {
     public void paymentUpdate(PaymentEvent paymentEvent) {
         log.info("[start] PaymentApplicationService - paymentUpdate");
         log.debug("[PaymentEvent] {}", paymentEvent);
-        PixStatusResponse statusPayment = pixClientRest.searchPixPaymentStatus(paymentEvent);
-        log.debug("[PixStatusResponse] {}", statusPayment);
+        Payment payment = paymentRepository.searchPaymentById(paymentEvent.getData().getId());
+        PixStatusResponse statusPayment = pixClientRest.searchPixPaymentStatus(payment);
+        payment.updateStatus(statusPayment);
+        paymentRepository.save(payment);
         log.info("[finish] PaymentApplicationService - paymentUpdate");
     }
 }

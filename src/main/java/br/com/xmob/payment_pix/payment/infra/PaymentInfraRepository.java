@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @Log4j2
 @RequiredArgsConstructor
@@ -19,5 +21,13 @@ public class PaymentInfraRepository implements PaymentRepository {
         paymentSpringDataMongo.save(payment);
         log.info("[finish] PaymentInfraRepository - save");
         return payment;
+    }
+
+    @Override
+    public Payment searchPaymentById(String id) {
+        log.info("[start] PaymentInfraRepository - searchPaymentById");
+        Optional<Payment> payment = paymentSpringDataMongo.findById(Long.valueOf(id));
+        log.info("[finish] PaymentInfraRepository - searchPaymentById");
+        return payment.orElseThrow((() -> new RuntimeException("Pagamento não encontrado!")));
     }
 }

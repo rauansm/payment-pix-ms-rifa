@@ -1,11 +1,12 @@
 package br.com.xmob.payment_pix.payment.infra;
 
-import br.com.xmob.payment_pix.payment.application.api.PaymentEvent;
 import br.com.xmob.payment_pix.payment.application.api.PaymentRequest;
 import br.com.xmob.payment_pix.payment.application.service.PixClientRest;
+import br.com.xmob.payment_pix.payment.domain.Payment;
 import br.com.xmob.payment_pix.payment.domain.PixRequest;
 import br.com.xmob.payment_pix.payment.domain.PixResponse;
 import br.com.xmob.payment_pix.payment.domain.PixStatusResponse;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PixInfraClientRest implements PixClientRest {
     private final MercadoPagoFeignClient mercadoPagoFeignClient;
+    private final PaymentRepository paymentRepository;
+
 
     @Override
     public PixResponse createCharge(PaymentRequest paymentRequest) {
@@ -26,13 +29,26 @@ public class PixInfraClientRest implements PixClientRest {
         return pixResponse;
     }
 
+    @CircuitBreaker(name = "searchPixStatus", fallbackMethod = "searchPixStatusFallback")
     @Override
-    public PixStatusResponse searchPixPaymentStatus(PaymentEvent paymentEvent) {
+    public PixStatusResponse searchPixPaymentStatus(Payment payment) {
         log.info("[start] PixInfraClientRest - searchPixPaymentStatus");
-        log.debug("[PaymentEvent] {}", paymentEvent);
-        PixStatusResponse statusPix = mercadoPagoFeignClient.searchPixPaymentStatus(paymentEvent.getData().getId());
+        log.debug("[Payment] {}", payment);
+        PixStatusResponse statusPix = mercadoPagoFeignClient.searchPixPaymentStatus(payment.getId());
         log.debug("[PixStatusResponse] {}", statusPix);
         log.info("[finish] PixInfraClientRest - searchPixPaymentStatus");
         return statusPix;
     }
+
+    public PixStatusResponse searchPixStatusFallback(Payment payment, Exception ex) {
+        log.info("[start] PixInfraClientRest - searchPixStatusFallback");
+        log.error("[Error] ", ex);
+        if (payment.isIntegrated()){
+            payment.markAsNotIntegrated();
+            paymentRepository.save(payment);
+        }
+        log.info("[finish] PixInfraClientRest - searchPixStatusFallback");
+        throw new RuntimeException("Error ao buscar status pix", ex);
+    }
+
 }
