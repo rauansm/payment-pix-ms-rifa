@@ -29,10 +29,10 @@ public class PaymentAPI {
     }
 
     @SqsListener(value = "fila-webhook")
-    public void paymentEventIdentifier(@Payload PaymentEvent paymentEvent){
-        log.info("[start] PaymentAPI - paymentEventIdentifier");
+    public void paymentEventWebhook(@Payload PaymentEvent paymentEvent){
+        log.info("[start] PaymentAPI - paymentEventWebhook");
         log.debug("[PaymentEvent] {}", paymentEvent);
         paymentService.paymentUpdate(paymentEvent);
-        log.info("[finish] PaymentAPI - paymentEventIdentifier");
+        log.info("[finish] PaymentAPI - paymentEventWebhook");
     }
 }

@@ -27,3 +27,24 @@ aws:
     region: ${AWS_SQS_REGION:us-east-1}
     accessKey: ${AWS_SQS_ACCESS_KEY:AKIA6ODU3YWADLRQD4KC}
     secretKey: ${AWS_SQS_SECRET_KEY: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}
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 5000
+          multiplier: 1
+          max-interval: 300000
+
+rabbitmq:
+  payment-status-exchange: ${PAYMENT_STATUS_EXCHANGE:payment-status.ex}
+  payment-aproved-queue: ${PAYMENT_APROVED_QUEUE:payment-aproved-ms-pix}
+  payment-expired-queue: ${PAYMENT_EXPIRED_QUEUE:payment-expired-ms-pix}
+  payment-aproved-routingKey: ${PAYMENT_APROVED_ROUTINGKEY:status-pix-paid}
+  payment-expired-routingKey: ${PAYMENT_EXPIRED_ROUTINGKEY:status-pix-expired}

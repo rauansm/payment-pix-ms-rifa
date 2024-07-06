@@ -1,5 +1,6 @@
 package br.com.xmob.payment_pix.payment.domain;
 
+import br.com.xmob.payment_pix.config.RabbitMQProperties;
 import br.com.xmob.payment_pix.payment.application.api.PaymentRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -75,5 +76,12 @@ public class Payment {
         this.status = statusPayment.getStatus();
         this.statusDetail = statusPayment.getStatus_detail();
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public String determineRoutingKeyByStatus(Payment payment, RabbitMQProperties rabbitmqProperties) {
+        if (payment.status.equals("approved")) {
+            return rabbitmqProperties.getPaymentAprovedRoutingKey();
+        }
+        return rabbitmqProperties.getPaymentExpiredRoutingKey();
     }
 }
