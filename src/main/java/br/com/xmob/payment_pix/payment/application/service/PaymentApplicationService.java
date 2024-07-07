@@ -22,7 +22,7 @@ public class PaymentApplicationService implements PaymentService {
 
     private final PixService pixService;
     private final PaymentRepository paymentRepository;
-    private final PaymentStatusNotifier paymentNotification;
+    private final PaymentStatusNotifier paymentStatusNotifier;
     private final RabbitMQProperties rabbitmqProperties;
 
     @Override
@@ -52,7 +52,7 @@ public class PaymentApplicationService implements PaymentService {
         try {
             String routingKey = payment.determineRoutingKeyByStatus(payment, rabbitmqProperties);
             PaymentStatusDTO paymentStatusDTO = new PaymentStatusDTO(payment);
-            paymentNotification.notifyMSOrder(paymentStatusDTO, rabbitmqProperties.getPaymentStatusExchange(), routingKey);
+            paymentStatusNotifier.notifyOrder(paymentStatusDTO, rabbitmqProperties.getPaymentStatusExchange(), routingKey);
         } catch (RuntimeException ex){
             payment.markAsNotIntegrated();
             paymentRepository.save(payment);

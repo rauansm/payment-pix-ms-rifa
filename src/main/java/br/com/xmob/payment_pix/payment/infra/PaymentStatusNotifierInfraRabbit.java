@@ -14,9 +14,9 @@ public class PaymentStatusNotifierInfraRabbit implements PaymentStatusNotifier {
     private final RabbitTemplate rabbitTemplate;
 
     @Override
-    public void notifyMSOrder(PaymentStatusDTO payment, String exchange, String routingKey) {
+    public void notifyOrder(PaymentStatusDTO paymentStatus, String exchange, String routingKey) {
         log.info("[start] PaymentNotificationApplicationService - notifyMSOrder");
-        rabbitTemplate.convertAndSend(exchange,routingKey,payment);
+        rabbitTemplate.convertAndSend(exchange,routingKey,paymentStatus);
         log.info("[finish] PaymentNotificationApplicationService - notifyMSOrder");
     }
 }
