@@ -1,4 +1,4 @@
-package br.com.xmob.payment_pix.payment.domain;
+package br.com.xmob.payment_pix.pix.domain;
 
 import lombok.Getter;
 import lombok.ToString;

@@ -1,6 +1,5 @@
-package br.com.xmob.payment_pix.payment.application.service;
+package br.com.xmob.payment_pix.payment.domain;
 
-import br.com.xmob.payment_pix.payment.domain.Payment;
 import lombok.Getter;
 import lombok.ToString;
 

@@ -1,4 +1,4 @@
-package br.com.xmob.payment_pix.payment.domain;
+package br.com.xmob.payment_pix.pix.domain;
 
 import br.com.xmob.payment_pix.payment.application.api.PaymentRequest;
 import lombok.Getter;

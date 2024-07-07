@@ -2,6 +2,8 @@ package br.com.xmob.payment_pix.payment.domain;
 
 import br.com.xmob.payment_pix.config.RabbitMQProperties;
 import br.com.xmob.payment_pix.payment.application.api.PaymentRequest;
+import br.com.xmob.payment_pix.pix.domain.PixResponse;
+import br.com.xmob.payment_pix.pix.domain.PixStatusResponse;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -83,5 +85,10 @@ public class Payment {
             return rabbitmqProperties.getPaymentAprovedRoutingKey();
         }
         return rabbitmqProperties.getPaymentExpiredRoutingKey();
+    }
+
+    public void markAsIntegrated() {
+        this.integrated = true;
+        this.updatedAt = LocalDateTime.now();
     }
 }

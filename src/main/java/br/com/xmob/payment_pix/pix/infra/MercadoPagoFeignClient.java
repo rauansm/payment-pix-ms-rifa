@@ -1,8 +1,8 @@
-package br.com.xmob.payment_pix.payment.infra;
+package br.com.xmob.payment_pix.pix.infra;
 
-import br.com.xmob.payment_pix.payment.domain.PixRequest;
-import br.com.xmob.payment_pix.payment.domain.PixResponse;
-import br.com.xmob.payment_pix.payment.domain.PixStatusResponse;
+import br.com.xmob.payment_pix.pix.domain.PixRequest;
+import br.com.xmob.payment_pix.pix.domain.PixResponse;
+import br.com.xmob.payment_pix.pix.domain.PixStatusResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

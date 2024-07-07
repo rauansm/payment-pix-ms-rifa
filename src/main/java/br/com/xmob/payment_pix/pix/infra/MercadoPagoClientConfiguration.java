@@ -1,4 +1,4 @@
-package br.com.xmob.payment_pix.payment.infra;
+package br.com.xmob.payment_pix.pix.infra;
 
 import feign.RequestInterceptor;
 import lombok.extern.log4j.Log4j2;
