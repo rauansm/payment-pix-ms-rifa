@@ -17,7 +17,6 @@ public class PixResponse {
     private String status_detail;
     private String date_created;
     private String date_last_updated;
-    private String date_of_expiration;
     private PointOfInteraction point_of_interaction;
 
 

@@ -17,8 +17,11 @@ public class PaymentRequest {
     @CPF
     @NotBlank(message = "O campo cpf é obrigatório e não pode estar em branco.")
     private String cpf;
-    @NotNull(message = "O campo quantia é obrigatório e não pode ser nulo.")
+    @NotNull(message = "O campo amount é obrigatório e não pode ser nulo.")
     private BigDecimal amount;
     @NotNull(message = "O campo OrderId é obrigatório e não pode ser nulo.")
     private UUID orderId;
+    @NotNull(message = "O campo pixExpirationTime é obrigatório e não pode ser nulo.")
+    private Integer pixExpirationTime;
+
 }

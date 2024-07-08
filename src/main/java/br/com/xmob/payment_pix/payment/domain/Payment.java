@@ -4,6 +4,8 @@ import br.com.xmob.payment_pix.config.RabbitMQProperties;
 import br.com.xmob.payment_pix.payment.application.api.PaymentRequest;
 import br.com.xmob.payment_pix.pix.domain.PixResponse;
 import br.com.xmob.payment_pix.pix.domain.PixStatusResponse;
+import br.com.xmob.payment_pix.utils.PaymentStatus;
+import br.com.xmob.payment_pix.utils.Date;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,9 +14,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -42,32 +41,19 @@ public class Payment {
         this.id = pixResponse.getId();
         this.payerName = paymentRequest.getName();
         this.payerCPF = paymentRequest.getCpf();
-        this.orderId = UUID.fromString(pixResponse.getExternal_reference());
+        this.orderId = paymentRequest.getOrderId();
         this.amount = pixResponse.getTransaction_amount();
         this.currencyId = pixResponse.getCurrency_id();
         this.paymentMethodId = pixResponse.getPayment_method_id();
         this.status = pixResponse.getStatus();
         this.statusDetail = pixResponse.getStatus_detail();
         this.integrated = true;
-        this.createdAt = adjustDate(pixResponse.getDate_created());
-        this.updatedAt = adjustDate(pixResponse.getDate_last_updated());
-        this.expirationAt = adjustDate(pixResponse.getDate_of_expiration());
+        this.createdAt = Date.adjustDate(pixResponse.getDate_created());
+        this.updatedAt = Date.adjustDate(pixResponse.getDate_last_updated());
+        this.expirationAt = this.createdAt.plusMinutes(paymentRequest.getPixExpirationTime());
         this.copiaCola = pixResponse.getPoint_of_interaction().getTransaction_data().getQr_code();
         this.qrCode = pixResponse.getPoint_of_interaction().getTransaction_data().getQr_code_base64();
     }
-
-    protected LocalDateTime adjustDate(String date){
-        OffsetDateTime adjustedDateTime;
-        try {
-        OffsetDateTime offsetDateTime = OffsetDateTime.parse(date, FORMATTER);
-        adjustedDateTime = offsetDateTime.withOffsetSameInstant(ZoneOffset.of("-03:00"));
-        } catch (Exception e){
-            return null;
-        }
-        return adjustedDateTime.toLocalDateTime();
-    }
-
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
     public void markAsNotIntegrated() {
         this.integrated = false;
@@ -81,10 +67,11 @@ public class Payment {
     }
 
     public String determineRoutingKeyByStatus(Payment payment, RabbitMQProperties rabbitmqProperties) {
-        if (payment.status.equals("approved")) {
-            return rabbitmqProperties.getPaymentAprovedRoutingKey();
-        }
-        return rabbitmqProperties.getPaymentExpiredRoutingKey();
+        return switch (payment.getStatus()) {
+            case PaymentStatus.APPROVED -> rabbitmqProperties.getPaymentAprovedRoutingKey();
+            case PaymentStatus.CANCELLED -> rabbitmqProperties.getPaymentExpiredRoutingKey();
+            default -> throw new IllegalArgumentException("Status desconhecido: " + payment.status);
+        };
     }
 
     public void markAsIntegrated() {

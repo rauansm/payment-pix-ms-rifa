@@ -3,6 +3,7 @@ package br.com.xmob.payment_pix.pix.application.service;
 import br.com.xmob.payment_pix.payment.application.api.PaymentRequest;
 import br.com.xmob.payment_pix.payment.domain.Payment;
 import br.com.xmob.payment_pix.payment.infra.PaymentRepository;
+import br.com.xmob.payment_pix.pix.domain.PixExpiredRequest;
 import br.com.xmob.payment_pix.pix.domain.PixRequest;
 import br.com.xmob.payment_pix.pix.domain.PixResponse;
 import br.com.xmob.payment_pix.pix.domain.PixStatusResponse;
@@ -40,6 +41,18 @@ public class PixApplicationService implements PixService {
         log.info("[finish] PixApplicationService - searchPixPaymentStatus");
         return statusPix;
     }
+    @CircuitBreaker(name = "PixPaymentAsExpired")
+    @Override
+    public void markPixPaymentAsExpired(Long paymentId, String cancelled) {
+        log.info("[start] PixApplicationService - markPixPaymentAsExpired");
+        try {
+        mercadoPagoFeignClient.markPixPaymentAsExpired(paymentId, new PixExpiredRequest(cancelled));
+        } catch (Exception ex) {
+            log.error("Falha ao marcar o pagamento Pix como expirado", ex);
+            throw new RuntimeException("API indisponível no momento!");
+        }
+        log.info("[finish] PixApplicationService - markPixPaymentAsExpired");
+    }
 
     public PixStatusResponse searchPixStatusFallback(Payment payment, Exception ex) {
         log.info("[start] PixApplicationService - searchPixStatusFallback");
@@ -51,5 +64,4 @@ public class PixApplicationService implements PixService {
         log.info("[finish] PixApplicationService - searchPixStatusFallback");
         throw new RuntimeException("Error ao buscar status pix", ex);
     }
-
 }

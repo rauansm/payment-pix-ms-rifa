@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface PaymentSpringDataMongo extends MongoRepository<Payment,Long> {
     List<Payment> findAllByIntegratedIsFalse();
+
+    List<Payment> findAllByStatusAndIntegratedIsTrue(String status);
 }

@@ -9,4 +9,6 @@ public interface PixService {
     PixResponse createCharge(PaymentRequest paymentRequest);
 
     PixStatusResponse searchPixPaymentStatus(Payment payment);
+
+    void markPixPaymentAsExpired(Long paymentId, String cancelled);
 }

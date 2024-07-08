@@ -10,8 +10,8 @@ logging:
   level:
     root: ${LOG_LEVEL:INFO}
     org.springframework.web: ${LOG_LEVEL:INFO}
-    org.springframework.data.mongodb.core: ${LOG_LEVEL:DEBUG}
-    br.com.xmob: ${LOG_LEVEL:DEBUG}
+    org.springframework.data.mongodb.core: ${LOG_LEVEL:INFO}
+    br.com.xmob: ${LOG_LEVEL:INFO}
 
 feign:
   client:
@@ -24,7 +24,13 @@ resilience4j:
   circuitbreaker:
     instances:
       searchPixStatus:
+      PixPaymentAsExpired:
+        registerHealthIndicator: true
         minimumNumberOfCalls: 4
         slidingWindowSize: 8
         waitDurationInOpenState: 50s
+
+webhook:
+  pix:
+    name: ${WEBHOOK_PIX:fila-webhook}
 

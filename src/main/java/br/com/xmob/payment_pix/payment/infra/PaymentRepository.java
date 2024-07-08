@@ -10,4 +10,6 @@ public interface PaymentRepository {
     Payment searchPaymentById(String id);
 
     List<Payment> searchForPaymentsWithoutIntegrated();
+
+    List<Payment> searchPendingPaymentsWithIntegration(String status);
 }

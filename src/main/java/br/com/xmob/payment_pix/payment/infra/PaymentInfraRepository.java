@@ -39,4 +39,12 @@ public class PaymentInfraRepository implements PaymentRepository {
         log.info("[finish] PaymentInfraRepository - searchForPaymentsWithoutIntegrated");
         return paymentsNotIntegrated;
     }
+
+    @Override
+    public List<Payment> searchPendingPaymentsWithIntegration(String status) {
+        log.info("[start] PaymentInfraRepository - searchPendingPaymentsWithIntegration");
+        List<Payment> pendingPayments = paymentSpringDataMongo.findAllByStatusAndIntegratedIsTrue(status);
+        log.info("[finish] PaymentInfraRepository - searchPendingPaymentsWithIntegration");
+        return pendingPayments;
+    }
 }

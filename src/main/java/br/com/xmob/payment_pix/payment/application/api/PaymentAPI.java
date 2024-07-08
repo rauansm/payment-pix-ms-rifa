@@ -28,7 +28,7 @@ public class PaymentAPI {
         return paymentResponse;
     }
 
-    @SqsListener(value = "fila-webhook")
+    @SqsListener(value = "${webhook.pix.name}")
     public void paymentEventWebhook(@Payload PaymentEvent paymentEvent){
         log.info("[start] PaymentAPI - paymentEventWebhook");
         log.debug("[PaymentEvent] {}", paymentEvent);
