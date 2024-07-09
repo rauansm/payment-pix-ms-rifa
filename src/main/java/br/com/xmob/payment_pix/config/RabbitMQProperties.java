@@ -16,4 +16,7 @@ public class RabbitMQProperties {
     private String paymentExpiredQueue;
     private String paymentExpiredRoutingKey;
     private String paymentAprovedRoutingKey;
+    private String deadLetterExchange;
+    private String paymentAprovedQueueDlq;
+    private String paymentExpiredQueueDlq;
 }

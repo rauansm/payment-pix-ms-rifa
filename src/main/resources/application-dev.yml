@@ -38,7 +38,7 @@ aws:
         retry:
           enabled: true
           max-attempts: 3
-          initial-interval: 5000
+          initial-interval: 3000
           multiplier: 1
           max-interval: 300000
 
@@ -48,3 +48,6 @@ rabbitmq:
   payment-expired-queue: ${PAYMENT_EXPIRED_QUEUE:payment-expired-ms-pix}
   payment-aproved-routingKey: ${PAYMENT_APROVED_ROUTINGKEY:status-pix-paid}
   payment-expired-routingKey: ${PAYMENT_EXPIRED_ROUTINGKEY:status-pix-expired}
+  deadLetter-exchange: ${DEADLETTER_EXCHANGE:payment-status-dlx.ex}
+  payment-aproved-queue-dlq: ${PAYMENT_APROVED_QUEUE_DLQ:payment-aproved.dlq}
+  payment-expired-queue-dlq: ${PAYMENT_EXPIRED_QUEUE_DLQ:payment-expired.dlq}

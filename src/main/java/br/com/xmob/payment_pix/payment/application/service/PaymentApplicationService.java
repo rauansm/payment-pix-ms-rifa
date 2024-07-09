@@ -11,6 +11,7 @@ import br.com.xmob.payment_pix.payment.infra.PaymentRepository;
 import br.com.xmob.payment_pix.pix.application.service.PixService;
 import br.com.xmob.payment_pix.pix.domain.PixResponse;
 import br.com.xmob.payment_pix.pix.domain.PixStatusResponse;
+import br.com.xmob.payment_pix.strategy.factory.RoutingKeyFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class PaymentApplicationService implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final PaymentStatusNotifier paymentStatusNotifier;
     private final RabbitMQProperties rabbitmqProperties;
+    private final RoutingKeyFactory routingKeyFactory;
 
     @Override
     public PaymentResponse createCharge(PaymentRequest paymentRequest) {
@@ -50,7 +52,7 @@ public class PaymentApplicationService implements PaymentService {
     public void notifyStatusPaymentRabbitMQ(Payment payment) {
         log.info("[start] PaymentApplicationService - notifyStatusPaymentRabbitMQ");
         try {
-            String routingKey = payment.determineRoutingKeyByStatus(payment, rabbitmqProperties);
+            String routingKey = routingKeyFactory.getStrategy(payment.getStatus()).determineRoutingKeyByStatus();
             PaymentStatusDTO paymentStatusDTO = new PaymentStatusDTO(payment);
             paymentStatusNotifier.notifyOrder(paymentStatusDTO, rabbitmqProperties.getPaymentStatusExchange(), routingKey);
         } catch (RuntimeException ex){

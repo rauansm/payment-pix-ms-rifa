@@ -24,7 +24,11 @@ resilience4j:
   circuitbreaker:
     instances:
       searchPixStatus:
-      PixPaymentAsExpired:
+        registerHealthIndicator: true
+        minimumNumberOfCalls: 4
+        slidingWindowSize: 8
+        waitDurationInOpenState: 50s
+      pixPaymentAsExpired:
         registerHealthIndicator: true
         minimumNumberOfCalls: 4
         slidingWindowSize: 8

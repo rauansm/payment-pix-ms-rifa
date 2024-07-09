@@ -41,7 +41,7 @@ public class PixApplicationService implements PixService {
         log.info("[finish] PixApplicationService - searchPixPaymentStatus");
         return statusPix;
     }
-    @CircuitBreaker(name = "PixPaymentAsExpired")
+    @CircuitBreaker(name = "pixPaymentAsExpired")
     @Override
     public void markPixPaymentAsExpired(Long paymentId, String cancelled) {
         log.info("[start] PixApplicationService - markPixPaymentAsExpired");

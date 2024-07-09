@@ -1,10 +1,8 @@
 package br.com.xmob.payment_pix.payment.domain;
 
-import br.com.xmob.payment_pix.config.RabbitMQProperties;
 import br.com.xmob.payment_pix.payment.application.api.PaymentRequest;
 import br.com.xmob.payment_pix.pix.domain.PixResponse;
 import br.com.xmob.payment_pix.pix.domain.PixStatusResponse;
-import br.com.xmob.payment_pix.utils.PaymentStatus;
 import br.com.xmob.payment_pix.utils.Date;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -64,14 +62,6 @@ public class Payment {
         this.status = statusPayment.getStatus();
         this.statusDetail = statusPayment.getStatus_detail();
         this.updatedAt = LocalDateTime.now();
-    }
-
-    public String determineRoutingKeyByStatus(Payment payment, RabbitMQProperties rabbitmqProperties) {
-        return switch (payment.getStatus()) {
-            case PaymentStatus.APPROVED -> rabbitmqProperties.getPaymentAprovedRoutingKey();
-            case PaymentStatus.CANCELLED -> rabbitmqProperties.getPaymentExpiredRoutingKey();
-            default -> throw new IllegalArgumentException("Status desconhecido: " + payment.status);
-        };
     }
 
     public void markAsIntegrated() {

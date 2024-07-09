@@ -22,6 +22,8 @@ public class RabbitMQConfiguration {
     public Queue paymentAprovedQueue() {
         return QueueBuilder
                 .durable(properties.getPaymentAprovedQueue())
+                .deadLetterExchange(properties.getDeadLetterExchange())
+                .deadLetterRoutingKey(properties.getPaymentAprovedRoutingKey())
                 .build();
     }
 
@@ -29,6 +31,8 @@ public class RabbitMQConfiguration {
     public Queue paymentExpiredQueue() {
         return QueueBuilder
                 .durable(properties.getPaymentExpiredQueue())
+                .deadLetterExchange(properties.getDeadLetterExchange())
+                .deadLetterRoutingKey(properties.getPaymentExpiredRoutingKey())
                 .build();
     }
 
@@ -61,6 +65,42 @@ public class RabbitMQConfiguration {
         return BindingBuilder.bind(paymentExpiredQueue())
                 .to(directExchange())
                 .with(properties.getPaymentExpiredRoutingKey());
+    }
+
+    @Bean
+    public Queue paymentAprovedQueueDlq() {
+        return QueueBuilder
+                .durable(properties.getPaymentAprovedQueueDlq())
+                .build();
+    }
+
+    @Bean
+    public DirectExchange deadLetterExchange() {
+        return ExchangeBuilder
+                .directExchange(properties.getDeadLetterExchange())
+                .build();
+    }
+
+    @Bean
+    public Binding bindingPaymentAprovedQueueDlq(){
+        return BindingBuilder
+                .bind(paymentAprovedQueueDlq())
+                .to(deadLetterExchange())
+                .with(properties.getPaymentAprovedRoutingKey());
+    }
+    @Bean
+    public Binding bindingPaymentExpiredQueueDlq(){
+        return BindingBuilder
+                .bind(paymentExpiredQueueDlq())
+                .to(deadLetterExchange())
+                .with(properties.getPaymentExpiredRoutingKey());
+    }
+
+    @Bean
+    public Queue paymentExpiredQueueDlq() {
+        return QueueBuilder
+                .durable(properties.getPaymentExpiredQueueDlq())
+                .build();
     }
 
     @Bean
