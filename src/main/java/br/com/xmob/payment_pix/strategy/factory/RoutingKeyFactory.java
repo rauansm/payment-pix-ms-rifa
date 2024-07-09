@@ -1,5 +1,6 @@
 package br.com.xmob.payment_pix.strategy.factory;
 
+import br.com.xmob.payment_pix.handler.APIException;
 import br.com.xmob.payment_pix.strategy.RoutingKeyStrategy;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class RoutingKeyFactory {
         log.debug("[PaymentStatus] {}", paymentStatus);
         RoutingKeyStrategy strategy = strategies.get(paymentStatus);
         if(strategy == null){
-            throw new IllegalArgumentException("Status desconhecido: " + paymentStatus);
+            throw APIException.business("Status desconhecido: " + paymentStatus);
         }
         log.info("[finish] RoutingKeyFactory - getStrategy");
         return strategy;

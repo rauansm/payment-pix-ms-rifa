@@ -1,5 +1,6 @@
 package br.com.xmob.payment_pix.pix.application.service;
 
+import br.com.xmob.payment_pix.handler.APIException;
 import br.com.xmob.payment_pix.payment.application.api.PaymentRequest;
 import br.com.xmob.payment_pix.payment.domain.Payment;
 import br.com.xmob.payment_pix.payment.infra.PaymentRepository;
@@ -49,7 +50,7 @@ public class PixApplicationService implements PixService {
         mercadoPagoFeignClient.markPixPaymentAsExpired(paymentId, new PixExpiredRequest(cancelled));
         } catch (Exception ex) {
             log.error("Falha ao marcar o pagamento Pix como expirado", ex);
-            throw new RuntimeException("API indisponível no momento!");
+            throw APIException.unavailableService("Serviço indisponível no momento!", ex);
         }
         log.info("[finish] PixApplicationService - markPixPaymentAsExpired");
     }
@@ -62,6 +63,6 @@ public class PixApplicationService implements PixService {
             paymentRepository.save(payment);
         }
         log.info("[finish] PixApplicationService - searchPixStatusFallback");
-        throw new RuntimeException("Error ao buscar status pix", ex);
+        throw APIException.unavailableService("Error ao buscar status pix", ex);
     }
 }

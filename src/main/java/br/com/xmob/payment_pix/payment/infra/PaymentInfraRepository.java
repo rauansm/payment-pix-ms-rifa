@@ -1,5 +1,6 @@
 package br.com.xmob.payment_pix.payment.infra;
 
+import br.com.xmob.payment_pix.handler.APIException;
 import br.com.xmob.payment_pix.payment.domain.Payment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -29,7 +30,7 @@ public class PaymentInfraRepository implements PaymentRepository {
         log.info("[start] PaymentInfraRepository - searchPaymentById");
         Optional<Payment> payment = paymentSpringDataMongo.findById(Long.valueOf(id));
         log.info("[finish] PaymentInfraRepository - searchPaymentById");
-        return payment.orElseThrow((() -> new RuntimeException("Pagamento não encontrado!")));
+        return payment.orElseThrow((() -> APIException.resourceNotFound("Pagamento não encontrado!")));
     }
 
     @Override
