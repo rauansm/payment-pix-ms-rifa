@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static br.com.xmob.payment_pix.utils.PaymentStatus.PENDING;
+
 @Service
 @RequiredArgsConstructor
 @Log4j2
@@ -27,7 +29,7 @@ public class PaymentNotIntegratedService {
         List<Payment> paymentsNotIntegrated = paymentRepository.searchForPaymentsWithoutIntegrated();
         log.debug("[Payments] {}", paymentsNotIntegrated);
         paymentsNotIntegrated.forEach(payment -> {
-            if (!payment.getStatus().equals(PaymentStatus.PENDING)) {
+            if (!payment.getStatus().equals(PENDING)) {
                 handleIntegratedPayment(payment);
             } else {
                 handleIntegrationFailure(payment);

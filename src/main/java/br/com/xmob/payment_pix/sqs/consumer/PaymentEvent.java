@@ -1,4 +1,4 @@
-package br.com.xmob.payment_pix.payment.application.api;
+package br.com.xmob.payment_pix.sqs.consumer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

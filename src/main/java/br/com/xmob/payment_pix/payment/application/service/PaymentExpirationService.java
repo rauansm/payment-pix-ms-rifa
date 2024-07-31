@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static br.com.xmob.payment_pix.utils.PaymentStatus.PENDING;
+
 @Service
 @Log4j2
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class PaymentExpirationService {
     @Scheduled(fixedDelay = 5, timeUnit = TimeUnit.SECONDS)
     public void checkForExpiredPayments() {
         log.debug("[start] PaymentExpirationService - checkForExpiredPayments");
-        List<Payment> pendingPayments = paymentRepository.searchPendingPaymentsWithIntegration(PaymentStatus.PENDING);
+        List<Payment> pendingPayments = paymentRepository.searchPendingPaymentsWithIntegration(PENDING);
         log.debug("[PendingPayments] {}", pendingPayments);
         pendingPayments.forEach(payment -> {
             if (LocalDateTime.now().isAfter(payment.getExpirationAt())) {
