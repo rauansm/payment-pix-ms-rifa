@@ -8,7 +8,7 @@
 		<version>2.7.17</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>br.com.xmob</groupId>
+	<groupId>br.com.rifa</groupId>
 	<artifactId>payment-pix</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>payment-pix</name>

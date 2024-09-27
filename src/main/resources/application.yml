@@ -11,7 +11,7 @@ logging:
     root: ${LOG_LEVEL:INFO}
     org.springframework.web: ${LOG_LEVEL:INFO}
     org.springframework.data.mongodb.core: ${LOG_LEVEL:INFO}
-    br.com.xmob: ${LOG_LEVEL:INFO}
+    br.com.xmob: ${LOG_LEVEL:DEBUG}
 
 feign:
   client:

@@ -25,8 +25,8 @@ server:
 aws:
   config:
     region: ${AWS_SQS_REGION:us-east-1}
-    accessKey: ${AWS_SQS_ACCESS_KEY:AKIA6ODU3YWADLRQD4KC}
-    secretKey: ${AWS_SQS_SECRET_KEY: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}
+    accessKey: ${AWS_SQS_ACCESS_KEY:AKIA6ODU3YWAJQBOFFE3}
+    secretKey: ${AWS_SQS_SECRET_KEY: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}
 
   rabbitmq:
     host: localhost
